@@ -196,7 +196,7 @@ begin
 
     Canvas.Draw(CPadding, CPadding, FTarget);
     Canvas.Font.Style := [TFontStyle.fsBold];
-    Canvas.Font.Color := clCaptionText;
+    Canvas.Font.Color := clWindowText;
     Canvas.TextOut(CLeftMargin, CMargin, FPackage.Name);
     Canvas.Font.Style := [];
     Canvas.Font.Color := clGrayText;
@@ -241,15 +241,34 @@ var
 begin
   LOffset :=  FButton.Left - FOSImages.Width - CMargin;
   LTopOffset := Height - FOSImages.Height - CMargin;
-  if ([cpWin32, cpWin64] * FPackage.Platforms) <> [] then
+
+  if cpLinux64 in FPackage.Platforms then
   begin
-    FOSImages.Draw(Canvas, LOffset, LTopOffset, 0);
+    FOSImages.Draw(Canvas, LOffset, LTopOffset, 4);
+    Dec(LOffset, FOSImages.Width);
+  end;
+
+  if ([cpIOSDevice32, cpIOSDevice64] * FPackage.Platforms) <> [] then
+  begin
+    FOSImages.Draw(Canvas, LOffset, LTopOffset, 3);
+    Dec(LOffset, FOSImages.Width);
+  end;
+
+  if cpAndroid in FPackage.Platforms then
+  begin
+    FOSImages.Draw(Canvas, LOffset, LTopOffset, 2);
     Dec(LOffset, FOSImages.Width);
   end;
 
   if cpOSX32 in FPackage.Platforms then
   begin
     FOSImages.Draw(Canvas, LOffset, LTopOffset, 1);
+    Dec(LOffset, FOSImages.Width);
+  end;
+
+  if ([cpWin32, cpWin64] * FPackage.Platforms) <> [] then
+  begin
+    FOSImages.Draw(Canvas, LOffset, LTopOffset, 0);
   end;
 end;
 
